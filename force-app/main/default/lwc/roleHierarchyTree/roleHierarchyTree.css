@@ -1,0 +1,41 @@
+.main-tree-wrapper {
+    position: relative;
+}
+
+/* Covers search + tree panel */
+.tree-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Optional classes for layout clarity */
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 100;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tree-content {
+    background: white;
+    padding-left: 5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 5rem;
+    overflow-y: auto;
+    max-height: calc(83vh - 150px);
+}
+
+.tree-controls {
+    padding-left: 4rem;
+}

@@ -1,0 +1,154 @@
+.node-branch {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-left: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+}
+
+/* Vertical line */
+.node-branch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: #ccc;
+}
+
+/* Horizontal connector */
+.node-branch::after {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    width: 0.75rem;
+    height: 1px;
+    background: #ccc;
+}
+
+/* Last child: only show top of vertical line */
+.node-branch.last-child::before {
+    height: 1rem;
+    bottom: auto;
+}
+
+.toggle-icon {
+    cursor: pointer;
+    margin-right: 0.5rem;
+    display: inline-block;
+    width: 1rem;
+}
+
+.drag-over {
+    font-weight: bold;
+    cursor: grab;
+}
+
+@keyframes pulseAnimation
+{   0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.8); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+}
+
+.pulse {
+    animation: pulseAnimation 3s ease-out;
+    border-radius: 5px;
+}
+
+.focus-highlight {
+    background-color: #fff200;
+}
+
+.fade-out {
+    transition: background-color 5s ease;
+    background-color: transparent;
+}
+
+.compact-action-links a {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    margin-right: 0.2rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+    background-color: #f4f4f4; /* light gray */
+    color: #333;
+    transition: background 0.2s;
+}
+
+.compact-action-links a:hover {
+    text-decoration: underline;
+}
+
+@keyframes fadeOut {
+    0%   { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    margin: 0.25rem 0;
+    background: #f7f7f7;
+    border-radius: 4px;
+    max-width: 400px;
+}
+
+.user-card.draggable {
+  cursor: grab;
+}
+
+.user-card:hover {
+    background-color: #e0f2fe;
+}
+
+.user-checkbox {
+    margin-left: auto; /* 📌 Push to far right */
+    padding-left: 0.75rem;
+}
+
+.user-icon-cell {
+    width: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-link {
+  color: #0070d2; /* Salesforce blue */
+  text-decoration: underline;
+}
+
+.disabled-link {
+  color: #999;           /* gray text */
+  text-decoration: none; /* no underline */
+  cursor: not-allowed;   /* “disabled” look */
+  pointer-events: none;  /* completely blocks click */
+}
+
+.inactive-icon {
+    --slds-c-icon-color-foreground-default: #e60000;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+    flex-grow: 1; /* 📌 Expand to fill */
+    overflow: hidden;
+}
+
+.user-name {
+    font-weight: 600;
+}
+
+.user-email {
+    font-size: 0.75rem;
+    color: #666;
+    word-break: break-word;
+}

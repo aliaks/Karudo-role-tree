@@ -1,0 +1,32 @@
+.custom-modal-body {
+    height: calc(30vh - 100px);
+    overflow-y: auto;
+    padding: 1rem;
+    width: 100%;
+}
+
+.role-create-spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+label.slds-radio[data-disabled="true"] .slds-form-element__label {
+    color: #a0a0a0 !important;
+}
+
+label.slds-radio[data-disabled="true"] .slds-radio_faux {
+    background-color: #fafafa !important;
+    border-color: #d0d0d0 !important;
+}
+
+label.slds-radio[data-disabled="true"] {
+    cursor: not-allowed !important;
+}

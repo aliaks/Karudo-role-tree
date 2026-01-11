@@ -1,0 +1,144 @@
+<template>
+
+  <div
+    class="node-container"
+    draggable={canManageRoles}
+    ondragstart={handleDragStart}
+    ondragover={allowDrop}
+    ondrop={handleDrop}
+    ondragleave={handleDragLeave}>
+
+      <span onclick={handleToggle} style="cursor: pointer; margin-right: 0.5rem;">
+        {toggleSymbol}
+      </span>
+
+      <span style={roleNodeStyle}
+            class={computedClass}
+            data-focus={isFocused}
+            tabindex="-1"
+            onmouseover={handleMouseOver}
+            onmouseout={handleMouseOut}>
+            {role.Name}
+      </span>
+
+      <span class="slds-m-top_x-small slds-m-left_x-small compact-action-links">
+
+            <template if:true={showAddRoleButton}>
+                <a onclick={handleAddRole}>Add</a>
+            </template>
+
+            <template if:true={showEditButton}>
+                <a onclick={handleEditRole}>Edit</a>
+            </template>
+
+            <template if:true={showDeleteButton}>
+              <a onclick={handleDeleteRole}>Delete</a>
+            </template>
+
+            <template if:true={showUsersButton}>
+              <a onclick={toggleUserList}>{usersButtonLabel}</a>
+            </template>
+
+            <template if:true={canManageRoles}>
+                <template if:false={isTopLevel}>
+                    <template if:true={cutConfirmed}>
+                        <a onclick={handleUndoCut}>Undo</a>
+                    </template>
+                    <template if:false={cutConfirmed}>
+                        <a onclick={handleCut}>Cut</a>
+                    </template>
+                </template>
+            </template>
+
+            <template if:true={showPasteButton}>
+              <a onclick={handlePaste} title={pasteTooltip}>Paste</a>
+            </template>
+
+            <template if:true={showCutSelectedUsersButton}>
+                <template if:true={cutSelectedUsersConfirmed}>
+                    <a onclick={handleUndoCutSelectedUsers}>Undo Cut Selected Users</a>
+                </template>
+                <template if:false={cutSelectedUsersConfirmed}>
+                    <a onclick={handleCutSelectedUsers}>Cut Selected Users</a>
+                </template>
+            </template>
+
+            <template if:true={showPasteUsersButton}>
+              <a onclick={handlePasteUsers} title={pasteUsersTooltip}>Paste Users</a>
+          </template>
+
+
+      </span>
+
+        <!-- Child User List -->
+      <template if:true={showUsers}>
+          <div class="node-branch">
+
+              <lightning-input type="checkbox"
+                   label="Show active users only"
+                   checked={showActiveUsersOnly}
+                   onchange={handleToggleInactiveUsers}>
+              </lightning-input>
+
+              <template for:each={filteredUsers} for:item="user">
+
+                <div key={user.Id} class={userCardClass} data-id={user.Id} draggable={canManageUsers} ondragstart={handleUserDragStart}>
+
+                    <div class="user-icon-cell">
+                      <template if:false={user.IsActive}>
+                          <lightning-icon icon-name="utility:ban"
+                            alternative-text="Inactive"
+                            size="xx-small"
+                            class="inactive-icon"
+                            title="Inactive User">
+                          </lightning-icon>
+                      </template>
+                    </div>
+
+                    <div class="user-info">
+                        <div class="user-name">
+                            <a href={user.href} target="_blank" rel="noopener" class={userLinkClass} onclick={handleUserLinkClick}>{user.Name}</a>
+                        </div>
+                        <div class="user-email">{user.Email}</div>
+                    </div>
+
+                    <div class="user-checkbox">
+                        <lightning-input type="checkbox"
+                            data-id={user.Id}
+                            checked={user.selected}
+                            onchange={handleUserSelectChange}
+                            disabled={isUserCheckboxDisabled}
+                            variant="label-hidden">
+                        </lightning-input>
+                    </div>
+
+                  </div>
+
+              </template>
+          </div>
+      </template>
+
+      <!-- Child Role Nodes -->
+      <template if:true={expanded}>
+        <template if:true={role.children}>
+          <template for:each={role.children} for:item="child">
+              <div key={child.Id} class={child.branchClass}>
+                    <c-role-node key={child.Id}
+                        role={child}
+                        expanded-state-map={expandedStateMap}
+                        focus-node-id={focusNodeId}
+                        focus-user-id={focusUserId}
+                        cut-role-name={cutRoleName}
+                        cut-role-id={cutRoleId}
+                        cut-user-ids={cutUserIds}
+                        cut-user-names={cutUserNames}
+                        cut-user-role-id={cutUserRoleId}>
+                    </c-role-node>
+              </div>
+          </template>
+        </template>
+      </template>
+
+  </div>
+
+</template>

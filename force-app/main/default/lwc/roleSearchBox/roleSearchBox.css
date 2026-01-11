@@ -1,0 +1,22 @@
+.dropdown-option {
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.dropdown-option:hover {
+    background-color: #f3f3f3;
+}
+
+.dropdown-option.highlighted {
+    background-color: #0176d3;
+    color: white;
+}
+
+.dropdown-container {
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

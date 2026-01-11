@@ -1,0 +1,70 @@
+<template>
+
+    <div class="main-tree-wrapper" if:true={canViewRoles}>
+
+        <template if:true={isUpdating}>
+            <div class="tree-spinner">
+                <lightning-spinner alternative-text="Updating Role Hierarchy..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <div class="sticky-header">
+            <div class="slds-grid slds-grid_vertical-align-center">
+
+                <!-- Left: Expand/Collapse All -->
+                <div class="tree-controls">
+                    <lightning-button
+                            label={expandCollapseAllLabel}
+                            onclick={handleExpandCollapseAll}>
+                    </lightning-button>
+                </div>
+
+                <!-- Center: Spacer to center search box -->
+                <div class="slds-col slds-align_absolute-center">
+                    <div class="slds-m-bottom_x-small" style="width: 400px;">
+                        <c-role-search-box options={allOptions} search-for-users={searchForUsers} onsearchselect={handleSearchSelect}>
+                        </c-role-search-box>
+                    </div>
+                </div>
+
+                <!-- Right: Optional empty space -->
+                <div style="width: 1rem;"></div>
+
+            </div>
+        </div>
+
+        <!-- Tree Content -->
+        <div data-id="treeContainer" class="tree-content">
+
+            <template if:true={roleTree}>
+                <template for:each={roleTree} for:item="role">
+                    <c-role-node
+                            key={role.Id}
+                            role={role}
+                            expanded-state-map={expandedStateMap}
+                            focus-node-id={focusNodeId}
+                            focus-user-id={focusUserId}
+                            cut-role-id={cutRoleId}
+                            cut-role-name={cutRoleName}
+                            cut-user-ids={cutUserIds}
+                            cut-user-names={cutUserNames}
+                            cut-user-role-id={cutUserRoleId}
+                            onroleinit={handleRoleInit}
+                            onrolefocus={handleRoleFocus}
+                            onrolecut={handleRoleCut}
+                            onuserscut={handleUsersCut}
+                            ontogglenode={handleToggleNode}
+                            onnewrolecreated={handleNewRoleCreated}
+                            onroleupdated={handleRoleUpdated}
+                            onroledelete={handleRoleDelete}
+                            onuserdrop={handleUserDrop}
+                            onroledrop={handleRoleDrop}
+                    >
+                    </c-role-node>
+                </template>
+            </template>
+        </div>
+
+    </div>
+
+</template>

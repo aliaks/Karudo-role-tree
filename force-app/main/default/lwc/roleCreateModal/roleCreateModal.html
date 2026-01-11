@@ -1,0 +1,174 @@
+<template>
+
+    <lightning-card>
+
+        <lightning-record-edit-form
+                record-id={roleId}
+                object-api-name="UserRole"
+                onsubmit={handleSubmit}
+                onsuccess={handleSuccess}
+                onerror={handleError}>
+            <lightning-modal-header label={modalTitle}></lightning-modal-header>
+
+            <lightning-modal-body class="custom-modal-body">
+                <lightning-input-field field-name="Name"></lightning-input-field>
+                <lightning-input-field field-name="RollupDescription"></lightning-input-field>
+                <lightning-input-field disabled value={parentRoleId} field-name="ParentRoleId"></lightning-input-field>
+                <template if:false={isEditMode}>
+                    <lightning-input-field field-name="DeveloperName"></lightning-input-field>
+                </template>
+
+                <lightning-layout multiple-rows class="slds-m-top_medium slds-m-left_small">
+                    <lightning-layout-item size="12">
+                        <div class="slds-form-element__label slds-text-heading_small slds-m-bottom_x-small">Opportunity Access</div>
+                        <div class="slds-text-color_weak slds-m-bottom_small" style="font-size: 0.875rem;">Control access to opportunities on owned accounts</div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <div class="slds-m-top_x-small slds-m-left_medium">
+                            <template for:each={filteredOpportunityAccessOptions} for:item="option">
+                                <div key={option.value} class="slds-form-element" style="margin-bottom: 0.25rem;">
+                                    <div class="slds-form-element__control">
+                                        <label class="slds-radio" data-disabled={option.isDisabled}>
+                                            <input type="radio" 
+                                                   name="oppAccess" 
+                                                   value={option.value}
+                                                   checked={option.checked}
+                                                   disabled={option.disabled}
+                                                   onchange={handleOpportunityAccessChange} />
+                                            <span class="slds-radio_faux"></span>
+                                            <span class="slds-form-element__label slds-p-right_small" style="line-height: 1.3;">
+                                                {option.label}
+                                                <span class="slds-text-color_weak" style="display: block; font-size: 0.75rem; margin-top: 0.0625rem; line-height: 1.2;">{option.helpText}</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+
+                <!-- Case Access Section -->
+                <lightning-layout multiple-rows class="slds-m-top_large slds-m-left_small">
+                    <lightning-layout-item size="12">
+                        <div class="slds-form-element__label slds-text-heading_small slds-m-bottom_x-small">Case Access</div>
+                        <div class="slds-text-color_weak slds-m-bottom_small" style="font-size: 0.875rem;">Control access to cases on owned accounts</div>
+                    </lightning-layout-item>
+                    <div class="slds-m-top_x-small slds-m-left_medium">
+                        <lightning-layout-item size="12">
+                            <template for:each={filteredCaseAccessOptions} for:item="option">
+                                <div key={option.value} class="slds-form-element" style="margin-bottom: 0.25rem;">
+                                    <div class="slds-form-element__control">
+                                        <label class="slds-radio" data-disabled={option.isDisabled}>
+                                            <input type="radio" 
+                                                   name="caseAccess" 
+                                                   value={option.value}
+                                                   checked={option.checked}
+                                                   disabled={option.disabled}
+                                                   onchange={handleCaseAccessChange} />
+                                            <span class="slds-radio_faux"></span>
+                                            <span class="slds-form-element__label slds-p-right_small" style="line-height: 1.3;">
+                                                {option.label}
+                                                <span class="slds-text-color_weak" style="display: block; font-size: 0.75rem; margin-top: 0.0625rem; line-height: 1.2;">{option.helpText}</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </template>
+                        </lightning-layout-item>
+                    </div>
+                </lightning-layout>
+
+            </lightning-modal-body>
+
+            <lightning-modal-footer>
+                <lightning-button type="submit" variant="brand" label="Save"></lightning-button>
+                <lightning-button variant="neutral" label="Cancel" class="slds-m-left_x-small" onclick={close}></lightning-button>
+            </lightning-modal-footer>
+
+        </lightning-record-edit-form>
+
+    </lightning-card>
+
+</template>
+
+
+
+
+
+
+<!--<template>-->
+
+<!--    <lightning-card>-->
+
+<!--        <template if:true={showSpinner}>-->
+<!--            <div class="tree-spinner">-->
+<!--                <lightning-spinner alternative-text="Wait..." size="medium"></lightning-spinner>-->
+<!--            </div>-->
+<!--        </template>-->
+
+<!--        <lightning-modal-body class="custom-modal-body">-->
+
+<!--            <lightning-record-edit-form-->
+<!--                    object-api-name="UserRole"-->
+<!--                    onsubmit={handleSubmit}-->
+<!--                    onsuccess={handleSuccess}-->
+<!--                    onerror={handleError}>-->
+<!--                <lightning-modal-header label="Create New User Role"></lightning-modal-header>-->
+
+<!--                <lightning-input-field value={name} onchange={handleNameChange} field-name="Name"></lightning-input-field>-->
+<!--            <lightning-input-field value={description} onchange={handleDescriptionChange} field-name="RollupDescription"></lightning-input-field>-->
+<!--            <lightning-input-field disabled value={parentRoleId} onchange={handleDescriptionChange} field-name="ParentRoleId"></lightning-input-field>-->
+<!--            <lightning-input-field value={developerName} onchange={handleDescriptionChange} field-name="DeveloperName"></lightning-input-field>-->
+<!--&lt;!&ndash;                <lightning-input-field field-name="OpportunityAccessForAccountOwner"></lightning-input-field>&ndash;&gt;-->
+<!--&lt;!&ndash;                <lightning-input-field field-name="CaseAccessForAccountOwner"></lightning-input-field>&ndash;&gt;-->
+
+<!--            &lt;!&ndash; Opportunity Access Section &ndash;&gt;-->
+<!--            <lightning-layout multiple-rows class="slds-m-top_medium">-->
+<!--                <lightning-layout-item size="12">-->
+<!--                    <label class="slds-form-element__label">Opportunity Access</label>-->
+<!--                </lightning-layout-item>-->
+<!--                <lightning-layout-item size="12">-->
+<!--                    <div class="slds-m-top_small slds-m-left_x-large">-->
+<!--                    <lightning-radio-group name="oppAccess"-->
+<!--                            options={opportunityAccessOptions}-->
+<!--                            value={opportunityAccess}-->
+<!--                            onchange={handleOpportunityAccessChange}-->
+<!--                            type="radio">-->
+<!--                    </lightning-radio-group>-->
+<!--                    </div>-->
+<!--                </lightning-layout-item>-->
+<!--            </lightning-layout>-->
+
+<!--            &lt;!&ndash; Case Access Section &ndash;&gt;-->
+<!--            <lightning-layout multiple-rows class="slds-m-top_medium">-->
+<!--                <lightning-layout-item size="12">-->
+<!--                    <label class="slds-form-element__label">Case Access</label>-->
+<!--                </lightning-layout-item>-->
+<!--                <div class="slds-m-top_small slds-m-left_x-large">-->
+<!--                <lightning-layout-item size="12">-->
+<!--                    <lightning-radio-group name="caseAccess"-->
+<!--                            options={caseAccessOptions}-->
+<!--                            value={caseAccess}-->
+<!--                            onchange={handleCaseAccessChange}-->
+<!--                            type="radio">-->
+<!--                    </lightning-radio-group>-->
+<!--                </lightning-layout-item>-->
+<!--                </div>-->
+<!--            </lightning-layout>-->
+
+<!--            <lightning-button type="submit" variant="brand" label="Save"></lightning-button>-->
+<!--            <lightning-button variant="neutral" label="Cancel" class="slds-m-left_x-small" onclick={close}></lightning-button>-->
+
+<!--            </lightning-record-edit-form>-->
+
+<!--        </lightning-modal-body>-->
+
+<!--&lt;!&ndash;        <lightning-modal-footer>&ndash;&gt;-->
+<!--&lt;!&ndash;            <lightning-button type="submit" variant="brand" label="Save"></lightning-button>&ndash;&gt;-->
+<!--&lt;!&ndash;            <lightning-button variant="neutral" label="Cancel" class="slds-m-left_x-small" onclick={close}></lightning-button>&ndash;&gt;-->
+<!--&lt;!&ndash;        </lightning-modal-footer>&ndash;&gt;-->
+
+<!--    </lightning-card>-->
+
+<!--</template>-->

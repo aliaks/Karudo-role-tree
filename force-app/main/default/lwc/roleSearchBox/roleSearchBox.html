@@ -1,0 +1,30 @@
+<template>
+    <div style="width: 400px;">
+
+        <lightning-input
+                type="search"
+                placeholder={placeholder}
+                value={searchKey}
+                onchange={handleChange}
+                onkeydown={handleKeyDown}
+        >
+        </lightning-input>
+
+        <template if:true={shouldShowDropdown}>
+            <div class="dropdown-container">
+                <template for:each={filteredOptions} for:item="option" for:index="index">
+                    <div
+                            key={option.value}
+                            data-id={option.value}
+                            data-index={index}
+                            class={option.className}
+                            onclick={handleOptionClick}
+                            onmouseenter={handleOptionMouseEnter}>
+                        {option.label}
+                    </div>
+                </template>
+            </div>
+        </template>
+
+    </div>
+</template>

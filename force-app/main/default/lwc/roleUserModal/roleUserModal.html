@@ -1,0 +1,57 @@
+<template>
+
+    <lightning-card>
+
+        <lightning-modal-header label={userRoleLabel}></lightning-modal-header>
+
+        <lightning-modal-body class="custom-modal-body">
+
+            <div class="slds-p-around_medium">
+
+                <template if:true={users}>
+
+                    <div class="slds-grid slds-p-bottom_small slds-align_absolute-center">
+                        <!-- Left: Checkbox -->
+                        <div class="slds-col">
+                            <lightning-input
+                                    type="checkbox"
+                                    label="Show active users only"
+                                    checked={showActiveOnly}
+                                    onchange={handleCheckboxChange}>
+                            </lightning-input>
+                        </div>
+
+                        <!-- Right: Totals -->
+                        <div class="slds-col slds-text-align_right slds-m-left_auto slds-p-top_x-small">
+                            <span class="slds-text-body_small">
+                                Total: {users.length} |
+                                Active: {activeCount} |
+                                Inactive: {inactiveCount}
+                            </span>
+                        </div>
+                    </div>
+
+                    <lightning-datatable
+                            key-field="Id"
+                            data={filteredUsers}
+                            hide-checkbox-column="true"
+                            columns={columns}>
+                    </lightning-datatable>
+
+                </template>
+
+                <template if:true={error}>
+                    <p class="slds-text-color_error">{error}</p>
+                </template>
+
+            </div>
+
+        </lightning-modal-body>
+
+        <lightning-modal-footer>
+            <lightning-button label="Close" onclick={close}></lightning-button>
+        </lightning-modal-footer>
+
+    </lightning-card>
+
+</template>

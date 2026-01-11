@@ -351,14 +351,8 @@ export default class RoleHierarchyTree extends LightningElement
             this.selectedRoleId = null;
 
             this.showSuccessToast('Role moved successfully');
-            
-            // Ensure parent is expanded in the state map
             this.expandedStateMap[parentRoleId] = true;
-            
-            // Rebuild the tree with updated expansion state
             this.roleTree = this.buildRoleHierarchy(this.rawRoles);
-            
-            // Set focusNodeId so the child will be highlighted when it renders
             this.focusNodeId = childRoleId;
             
             // Wait for the tree to rebuild and components to re-render

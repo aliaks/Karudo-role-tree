@@ -83,6 +83,18 @@
     text-decoration: underline;
 }
 
+/* Make Undo button more noticeable */
+.compact-action-links a.undo-button {
+    background-color: #ff9500;
+    color: #fff;
+    font-weight: 600;
+}
+
+.compact-action-links a.undo-button:hover {
+    background-color: #ff8000;
+    text-decoration: underline;
+}
+
 @keyframes fadeOut {
     0%   { opacity: 1; }
     80%  { opacity: 1; }

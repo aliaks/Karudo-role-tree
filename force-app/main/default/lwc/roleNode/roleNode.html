@@ -42,7 +42,7 @@
             <template if:true={canManageRoles}>
                 <template if:false={isTopLevel}>
                     <template if:true={cutConfirmed}>
-                        <a onclick={handleUndoCut}>Undo</a>
+                        <a onclick={handleUndoCut} class="undo-button">Undo</a>
                     </template>
                     <template if:false={cutConfirmed}>
                         <a onclick={handleCut}>Cut</a>
@@ -123,7 +123,7 @@
         <template if:true={role.children}>
           <template for:each={role.children} for:item="child">
               <div key={child.Id} class={child.branchClass}>
-                    <c-role-node key={child.Id}
+                    <c-role-node
                         role={child}
                         expanded-state-map={expandedStateMap}
                         focus-node-id={focusNodeId}

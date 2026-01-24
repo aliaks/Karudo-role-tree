@@ -56,7 +56,7 @@
 
             <template if:true={showCutSelectedUsersButton}>
                 <template if:true={cutSelectedUsersConfirmed}>
-                    <a onclick={handleUndoCutSelectedUsers}>Undo Cut Selected Users</a>
+                    <a onclick={handleUndoCutSelectedUsers} class="undo-button">Undo Cut Selected Users</a>
                 </template>
                 <template if:false={cutSelectedUsersConfirmed}>
                     <a onclick={handleCutSelectedUsers}>Cut Selected Users</a>

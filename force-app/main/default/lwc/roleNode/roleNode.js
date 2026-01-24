@@ -389,7 +389,7 @@ export default class RoleNode extends NavigationMixin(LightningElement)
     get pasteTooltip(){ return `Move Role [${this.cutRoleName}] here.`; }
     get pasteUsersTooltip(){ return `Move Users ${this.cutUserNames} here.`; }
     get isSelected(){ return this.selectedRoleId === this.role.Id; }
-    get toggleSymbol(){ return this.role.children && this.role.children.length > 0 ? (this.expanded ? '▼' : '▶') : ''; }
+    get toggleSymbol(){ return this.role.children && this.role.children.length > 0 ? (this.expanded ? '⌄' : '›') : ''; }
     get isFocused(){ return this.role?.Id === this.focusNodeId; }
     get isTopLevel(){ return !this.role?.ParentRoleId; }
     get showDeleteButton(){ return this.totalUsers === 0 && this.role?.children?.length === 0; }

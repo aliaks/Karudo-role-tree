@@ -27,10 +27,11 @@ export default class RoleNode extends NavigationMixin(LightningElement)
     @track isHovered = false;
     @track expanded = true;
     @track showUsers = false;
-    @track showActiveUsersOnly = true;
+    @track showActiveUsersOnly = false;
     @track cutConfirmed = false;
     @track cutSelectedUsersConfirmed = false;
     @track totalUsers = 0;
+    @track inactiveUsers = 0;
 
     @track users = [];
     @track selectedUserIds = new Set();
@@ -43,6 +44,7 @@ export default class RoleNode extends NavigationMixin(LightningElement)
     {   if(this.role)
         {   this.dispatchEvent(new CustomEvent('roleinit', { detail: { roleId: this.role.Id, componentRef: this }, bubbles: true, composed: true }));
             this.totalUsers = this.role.TotalUsers;
+            this.inactiveUsers = this.role.InactiveUsers || 0;
 
                 // In case the node element is just being reconnecting to DOM
             if(this.role?.Id === this.focusNodeId)
@@ -92,6 +94,7 @@ export default class RoleNode extends NavigationMixin(LightningElement)
         {   this.users = data;
             this.showUsers = this.users.length > 0;
             this.totalUsers = this.users.length;
+            this.inactiveUsers = this.users.filter(u => !u.IsActive).length;
             this.selectedUserIds = new Set();
             this.cutSelectedUsersConfirmed = false;
         });
@@ -102,6 +105,7 @@ export default class RoleNode extends NavigationMixin(LightningElement)
         {   this.users = data;
             this.showUsers = this.users.length > 0;
             this.totalUsers = this.users.length;
+            this.inactiveUsers = this.users.filter(u => !u.IsActive).length;
             this.showActiveUsersOnly = isActive;
             this.selectedUserIds = new Set();
             this.cutSelectedUsersConfirmed = false;
@@ -372,7 +376,6 @@ export default class RoleNode extends NavigationMixin(LightningElement)
 
     toggleUserList()
     {   this.showUsers = !this.showUsers;
-        this.showActiveUsersOnly = true;
         if(this.showUsers && this.users.length === 0)
         {   getUsersByRole({ roleId: this.role.Id }).then(data => { this.users = data; });
         }
@@ -391,7 +394,7 @@ export default class RoleNode extends NavigationMixin(LightningElement)
     get isTopLevel(){ return !this.role?.ParentRoleId; }
     get showDeleteButton(){ return this.totalUsers === 0 && this.role?.children?.length === 0; }
     get showUsersButton(){ return this.role?.TotalUsers > 0; }
-    get usersButtonLabel(){ return `Users [${this.totalUsers}]`; }
+    get usersButtonLabel(){ return this.inactiveUsers > 0 ? `Users ${this.totalUsers} (${this.inactiveUsers} inactive)` : `Users ${this.totalUsers}`; }
     get userLinkClass(){ return this.canManageUsers ? 'user-link' : 'user-link disabled-link'; }
     get userCardClass(){ return this.canManageUsers ? 'user-card draggable' : 'user-card'; }
     get isUserCheckboxDisabled(){ return !this.canManageUsers; }
@@ -409,12 +412,12 @@ export default class RoleNode extends NavigationMixin(LightningElement)
 
     get filteredUsers()
     {   const base = this.showActiveUsersOnly ? this.users.filter(user => user.IsActive) : this.users;
-        return base.map(user => ({...user, selected: this.selectedUserIds.has(user.Id) }));
-    }
-
-    get filteredUsers()
-    {   const base = this.showActiveUsersOnly ? this.users.filter(user => user.IsActive) : this.users;
-        return base.map(user => ({...user, selected: this.selectedUserIds.has(user.Id), href: '/lightning/r/User/' + user.Id + '/view' }));
+        // Sort: active users first, then inactive users
+        const sorted = [...base].sort((a, b) => {
+            if (a.IsActive === b.IsActive) return 0;
+            return a.IsActive ? -1 : 1;
+        });
+        return sorted.map(user => ({...user, selected: this.selectedUserIds.has(user.Id), href: '/lightning/r/User/' + user.Id + '/view' }));
     }
 
     get computedClass()

@@ -41,7 +41,7 @@ try {
     UserRole svp = [
         SELECT Id, Name 
         FROM UserRole 
-        WHERE Name = 'SVP – Southeast' 
+        WHERE Name = 'SVP - Southeast' 
         LIMIT 1
     ];
     System.debug('Found existing role: ' + svp.Name + ' (ID: ' + svp.Id + ')');
@@ -462,35 +462,35 @@ try {
     createRole('(Jacksonville) Account Executive – Commercial', 'AE_Commercial_Jacksonville', branchMgrJacksonville.Id);
     createRole('(Jacksonville) Service Supervisor', 'Service_Supervisor_Jacksonville', branchMgrJacksonville.Id);
     
-    // Level 6: Individual Contributors - St. Augustine
-    createRole('(St. Augustine) Account Executive – SMB', 'AE_SMB_St_Augustine', branchMgrStAugustine.Id);
-    createRole('(St. Augustine) Field Service Lead', 'Field_Service_Lead_St_Augustine', branchMgrStAugustine.Id);
+    // // Level 6: Individual Contributors - St. Augustine
+    // createRole('(St. Augustine) Account Executive – SMB', 'AE_SMB_St_Augustine', branchMgrStAugustine.Id);
+    // createRole('(St. Augustine) Field Service Lead', 'Field_Service_Lead_St_Augustine', branchMgrStAugustine.Id);
     
-    // Level 6: Individual Contributors - Tallahassee
-    createRole('(Tallahassee) Account Executive – Commercial', 'AE_Commercial_Tallahassee', branchMgrTallahassee.Id);
-    createRole('(Tallahassee) Operations Lead', 'Operations_Lead_Tallahassee', branchMgrTallahassee.Id);
+    // // Level 6: Individual Contributors - Tallahassee
+    // createRole('(Tallahassee) Account Executive – Commercial', 'AE_Commercial_Tallahassee', branchMgrTallahassee.Id);
+    // createRole('(Tallahassee) Operations Lead', 'Operations_Lead_Tallahassee', branchMgrTallahassee.Id);
     
-    // Level 6: Individual Contributors - Pensacola
-    createRole('(Pensacola) Account Executive – SMB', 'AE_SMB_Pensacola', branchMgrPensacola.Id);
-    createRole('(Pensacola) Field Service Coordinator', 'Field_Service_Coordinator_Pensacola', branchMgrPensacola.Id);
+    // // Level 6: Individual Contributors - Pensacola
+    // createRole('(Pensacola) Account Executive – SMB', 'AE_SMB_Pensacola', branchMgrPensacola.Id);
+    // createRole('(Pensacola) Field Service Coordinator', 'Field_Service_Coordinator_Pensacola', branchMgrPensacola.Id);
     
-    // Level 6: Individual Contributors - Orlando
-    createRole('(Orlando) Senior Account Executive – Commercial', 'Sr_AE_Commercial_Orlando', branchMgrOrlando.Id);
-    createRole('(Orlando) Account Executive – Commercial', 'AE_Commercial_Orlando', branchMgrOrlando.Id);
-    createRole('(Orlando) Service Supervisor', 'Service_Supervisor_Orlando', branchMgrOrlando.Id);
+    // // Level 6: Individual Contributors - Orlando
+    // createRole('(Orlando) Senior Account Executive – Commercial', 'Sr_AE_Commercial_Orlando', branchMgrOrlando.Id);
+    // createRole('(Orlando) Account Executive – Commercial', 'AE_Commercial_Orlando', branchMgrOrlando.Id);
+    // createRole('(Orlando) Service Supervisor', 'Service_Supervisor_Orlando', branchMgrOrlando.Id);
     
-    // Level 6: Individual Contributors - Kissimmee
-    createRole('(Kissimmee) Account Executive – SMB', 'AE_SMB_Kissimmee', branchMgrKissimmee.Id);
-    createRole('(Kissimmee) Field Service Lead', 'Field_Service_Lead_Kissimmee', branchMgrKissimmee.Id);
+    // // Level 6: Individual Contributors - Kissimmee
+    // createRole('(Kissimmee) Account Executive – SMB', 'AE_SMB_Kissimmee', branchMgrKissimmee.Id);
+    // createRole('(Kissimmee) Field Service Lead', 'Field_Service_Lead_Kissimmee', branchMgrKissimmee.Id);
     
-    // Level 6: Individual Contributors - Miami
-    createRole('(Miami) Senior Account Executive – Enterprise', 'Sr_AE_Enterprise_Miami', branchMgrMiami.Id);
-    createRole('(Miami) Account Executive – Commercial', 'AE_Commercial_Miami', branchMgrMiami.Id);
-    createRole('(Miami) Service Supervisor', 'Service_Supervisor_Miami', branchMgrMiami.Id);
+    // // Level 6: Individual Contributors - Miami
+    // createRole('(Miami) Senior Account Executive – Enterprise', 'Sr_AE_Enterprise_Miami', branchMgrMiami.Id);
+    // createRole('(Miami) Account Executive – Commercial', 'AE_Commercial_Miami', branchMgrMiami.Id);
+    // createRole('(Miami) Service Supervisor', 'Service_Supervisor_Miami', branchMgrMiami.Id);
     
-    // Level 6: Individual Contributors - Fort Lauderdale
-    createRole('(Fort Lauderdale) Account Executive – Commercial', 'AE_Commercial_Fort_Lauderdale', branchMgrFortLauderdale.Id);
-    createRole('(Fort Lauderdale) Field Service Coordinator', 'Field_Service_Coordinator_Fort_Lauderdale', branchMgrFortLauderdale.Id);
+    // // Level 6: Individual Contributors - Fort Lauderdale
+    // createRole('(Fort Lauderdale) Account Executive – Commercial', 'AE_Commercial_Fort_Lauderdale', branchMgrFortLauderdale.Id);
+    // createRole('(Fort Lauderdale) Field Service Coordinator', 'Field_Service_Coordinator_Fort_Lauderdale', branchMgrFortLauderdale.Id);
     
     System.debug('✅ Successfully created all UserRole records in the Southeast hierarchy!');
     System.debug('Total roles created: ' + [SELECT COUNT() FROM UserRole WHERE DeveloperName LIKE '%Charlotte%' OR DeveloperName LIKE '%Atlanta%' OR DeveloperName LIKE '%Miami%']);

@@ -72,6 +72,8 @@ public with sharing class RoleHierarchyController
         role.RollupDescription = rollupDescription;
         role.CaseAccessForAccountOwner = caseAccess;
         role.OpportunityAccessForAccountOwner = opportunityAccess;
+
+        /* Ales's watermark */
         
         update role;
         

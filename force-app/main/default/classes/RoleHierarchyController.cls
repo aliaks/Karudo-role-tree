@@ -48,6 +48,37 @@ public with sharing class RoleHierarchyController
     }
 
     @AuraEnabled
+    public static RoleWithUsers createRole(String name, String parentRoleId, String developerName, String rollupDescription, String caseAccess, String opportunityAccess)
+    {
+        UserRole role = new UserRole();
+        role.Name = name;
+        role.ParentRoleId = parentRoleId;
+        role.DeveloperName = developerName;
+        role.RollupDescription = rollupDescription;
+        role.CaseAccessForAccountOwner = caseAccess;
+        role.OpportunityAccessForAccountOwner = opportunityAccess;
+        
+        insert role;
+        
+        return fetchRoleById(role.Id);
+    }
+
+    @AuraEnabled
+    public static RoleWithUsers updateRole(String roleId, String name, String parentRoleId, String rollupDescription, String caseAccess, String opportunityAccess)
+    {
+        UserRole role = new UserRole(Id = roleId);
+        role.Name = name;
+        role.ParentRoleId = parentRoleId;
+        role.RollupDescription = rollupDescription;
+        role.CaseAccessForAccountOwner = caseAccess;
+        role.OpportunityAccessForAccountOwner = opportunityAccess;
+        
+        update role;
+        
+        return fetchRoleById(roleId);
+    }
+
+    @AuraEnabled
     public static List<RoleWithUsers> fetchRoles()
     {
         List<UserRole> roles = [select Id, Name, ParentRoleId, CaseAccessForAccountOwner, OpportunityAccessForAccountOwner, (select Id, Name, Email, IsActive from Users) from UserRole where PortalType = 'None'];

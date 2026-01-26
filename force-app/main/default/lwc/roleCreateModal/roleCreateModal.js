@@ -2,6 +2,8 @@ import { LightningElement, api, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import LightningModal from 'lightning/modal';
 import getOrgDefaults from '@salesforce/apex/RoleHierarchyController.getOrgDefaults';
+import createRole from '@salesforce/apex/RoleHierarchyController.createRole';
+import updateRole from '@salesforce/apex/RoleHierarchyController.updateRole';
 
 export default class RoleCreateModal extends LightningModal
 {   @api parentRole;
@@ -33,10 +35,18 @@ export default class RoleCreateModal extends LightningModal
 
     connectedCallback()
     {   if(this.existingRole)
-        {   // Edit mode
+        {   // Edit mode - set values immediately
             this.isEditMode = true;
             this.roleId = this.existingRole.Id;
             this.parentRoleId = this.existingRole.ParentRoleId;
+            
+            // Set access values from existing role immediately
+            if(this.existingRole.OpportunityAccessForAccountOwner)
+            {   this.opportunityAccess = this.existingRole.OpportunityAccessForAccountOwner;
+            }
+            if(this.existingRole.CaseAccessForAccountOwner)
+            {   this.caseAccess = this.existingRole.CaseAccessForAccountOwner;
+            }
         }
         else if(this.parentRole)
         {   // Create mode
@@ -52,24 +62,17 @@ export default class RoleCreateModal extends LightningModal
             this.minOpportunityAccessLevel = this.orgDefaults.opportunityAccessLevel;
             this.minCaseAccessLevel = this.orgDefaults.caseAccessLevel;
             
-            // Set default values to org defaults if not in edit mode
+            // Only update access values if not already set (i.e., in create mode)
             if(!this.isEditMode)
             {   this.opportunityAccess = this.orgDefaults.opportunityAccess;
                 this.caseAccess = this.orgDefaults.caseAccess;
             }
             else
-            {   // In edit mode, preserve existing values if they exist
-                if(this.existingRole.OpportunityAccessForAccountOwner)
-                {   this.opportunityAccess = this.existingRole.OpportunityAccessForAccountOwner;
-                }
-                else
+            {   // In edit mode, only fall back to org defaults if values weren't set
+                if(!this.existingRole.OpportunityAccessForAccountOwner)
                 {   this.opportunityAccess = this.orgDefaults.opportunityAccess;
                 }
-                
-                if(this.existingRole.CaseAccessForAccountOwner)
-                {   this.caseAccess = this.existingRole.CaseAccessForAccountOwner;
-                }
-                else
+                if(!this.existingRole.CaseAccessForAccountOwner)
                 {   this.caseAccess = this.orgDefaults.caseAccess;
                 }
             }
@@ -98,44 +101,56 @@ export default class RoleCreateModal extends LightningModal
         }));
     }
 
-    handleSuccess(event)
-    {   const roleId = event.detail.id;
-        if(this.isEditMode)
-        {   this.close({ updatedRoleId: roleId });
-        }
-        else
-        {   this.close({ newRoleId: roleId });
-        }
-    }
-
-    handleError(event)
-    {   const error = event.detail;
-        console.error('Role creation failed:', error);
-
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Error creating role',
-                message: error.message || 'An unexpected error occurred.',
-                variant: 'error',
-                mode: 'sticky'
-            })
-        );
-    }
-
-    handleSubmit(event)
+    async handleSubmit(event)
     {   event.preventDefault();
         const fields = event.detail.fields;
-        fields.CaseAccessForAccountOwner = this.caseAccess;
-        fields.OpportunityAccessForAccountOwner = this.opportunityAccess;
-        this.template.querySelector('lightning-record-edit-form').submit(fields);
+        
+        try {
+            let result;
+            if (this.isEditMode) {
+                // Update existing role
+                result = await updateRole({
+                    roleId: this.roleId,
+                    name: fields.Name,
+                    parentRoleId: fields.ParentRoleId,
+                    rollupDescription: fields.RollupDescription || null,
+                    caseAccess: this.caseAccess,
+                    opportunityAccess: this.opportunityAccess
+                });
+                
+                this.close({ updatedRoleId: result.Id, updatedRole: result });
+            } else {
+                // Create new role
+                result = await createRole({
+                    name: fields.Name,
+                    parentRoleId: fields.ParentRoleId,
+                    developerName: fields.DeveloperName,
+                    rollupDescription: fields.RollupDescription || null,
+                    caseAccess: this.caseAccess,
+                    opportunityAccess: this.opportunityAccess
+                });
+                
+                this.close({ newRoleId: result.Id, newRole: result });
+            }
+        } catch (error) {
+            console.error('Error saving role:', error);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Error saving role',
+                    message: error.body?.message || error.message || 'An unexpected error occurred.',
+                    variant: 'error',
+                    mode: 'sticky'
+                })
+            );
+        }
     }
 
     handleOpportunityAccessChange(event)
-    {   this.opportunityAccess = event.detail.value;
+    {   this.opportunityAccess = event.target.value;
     }
 
     handleCaseAccessChange(event)
-    {   this.caseAccess = event.detail.value;
+    {   this.caseAccess = event.target.value;
     }
 
     get modalTitle()
